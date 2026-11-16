@@ -1,0 +1,5 @@
+__pycache__/
+*.py[cod]
+.lgd-nfy*
+*.log
+.aquila_dwin_settings.json

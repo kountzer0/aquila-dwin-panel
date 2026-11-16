@@ -1,0 +1,22 @@
+[Unit]
+Description=Voxelab Aquila DWIN control panel for %i
+Wants=network-online.target klipper.service moonraker.service
+After=network-online.target klipper.service moonraker.service
+
+[Service]
+Type=simple
+User=%i
+Group=%i
+SupplementaryGroups=dialout gpio
+WorkingDirectory=/home/%i
+Environment=PYTHONUNBUFFERED=1
+Environment=DWIN_UART_PORT=/dev/ttyAMA0
+Environment=MOONRAKER_URL=http://127.0.0.1:7125
+ExecStartPre=/bin/sh -c 'until /usr/bin/curl -fsS http://127.0.0.1:7125/api/printer >/dev/null; do /usr/bin/sleep 2; done'
+ExecStart=/usr/bin/python3 /home/%i/aquila-dwin/aquila_landscape_control.py
+Restart=on-failure
+RestartSec=5
+TimeoutStartSec=infinity
+
+[Install]
+WantedBy=multi-user.target
